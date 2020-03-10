@@ -1,0 +1,106 @@
+Read code that is written from others.
+
+Principles of least astonishment.
+	- Things should behave exactly at the first glance.
+	- KISS ( Keep It Simple Stupid )
+	- At any one time, we can only be aware of limited things.
+		- The takeaway here is that write code that could easily be understood at one glance if possible.
+	- Avoid skim reading if possible - know when you are focused and know when you are not.
+		- Create a system that you have to do some kinds of things in order to spend the time that you are not in the zone and what to do when you are in the zone.
+		- Map out and draw out how the fields are related.
+	- Always make things simple and/or simpler.
+	- Default to clever up the code.
+	- Prefer to explicit rather than implicit.
+	- The goal of the code should be self-sufficient.
+
+When making an API 
+	- Who is the user of the API?
+	- How will he use it?
+	- Where will it be used?
+
+What are the most common arguments?
+What does the user expect as the return value?
+Understandable code is almost always better compared to performant code.
+
+Grounding
+	- The process of adding material to the common ground between speakers..to ensure that knowledge is properly understood by all participants.
+	- More like clarifying what things mean.
+
+When creating code, assume that people will have no idea what the codebase is.
+If possible consider what is the context.
+	- This means what is the situation when things are getting created.
+
+Why things are the way they are.
+	- Why is your code written this way?
+	- This might come helpful in adding docstrings to functions.
+
+Miller's Law
+	- To understand what another person is saying, hou must assume that it is true and try to imagine what it could be true of.
+	- When people come to you to criticize, ask questions like:
+		- What are you using this API for?
+		- Could there be any way to get you what you need?
+		- GET INTO THEIR SIDE AND GET THE CONTEXT
+
+1. Understand what their users want.
+2. Write good code, ship things.
+3. Help others do their jobs well.
+
+
+================================================================
+
+Tuples and Dictionaries
+a = {'x': 100, 'y': 200}
+b = list(a.items())
+
+================================================================
+class AuthDogApi(object):
+	url = DOG_URL
+	
+	def __init__(self, username, password):
+		self.auth = HTTPBasicAuth(username, password)
+
+	def get(self, status):
+		response = requests.get(
+			self.url,
+			auth=self.auth,
+			params={'status': status}
+			)
+		return response.json()
+
+
+def find_dogs(status, auth_dog_api):
+	return auth_dog_api.get(status)
+
+---------------------------------------------------------------
+Comparison
+
+class DogApi(object):
+	def __init__(self, username, passowrd):
+		self.auth = HTTPBasicAuth(username, password)
+	
+	def find_dogs(self, status):
+		response = requests.get(
+			auth=self.auth,
+			params={'status': status}
+			)
+		return response.json()
+
+def test_find_dogs():
+	from core import DogApi
+	
+	status = "It's complicated"
+	username = "Admin"
+	password = "password"
+
+	expected = [{
+		"name": "Fido",
+		"likes": "Long walks anywhere",
+		"status": "It's complicated"
+	}]
+
+	dog_client = DogApi(username, password)
+	dogs = dog_client.find_dogs(status)
+	assert dogs == expected
+		
+================================================================
+
